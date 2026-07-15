@@ -147,3 +147,4 @@ sudo chown -R "${SERVICE_USER}:${SERVICE_USER}" "${PROJECT_DEST}"
 # Start a shell as the user
 echo "Switching to ${SERVICE_USER} shell."
 sudo machinectl shell "${SERVICE_USER}@" /bin/bash
+cd azerothcore

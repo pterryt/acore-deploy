@@ -13,8 +13,8 @@ help:
 		{ printf "\033[32m  %-35s\033[0m %s\n", $$1, $$2 }'
 
 MYSQL_HOST ?= 127.0.0.1
-MYSQL_PORT ?= 3306
-MYSQL_USER ?= root
+MYSQL_PORT ?= 3307
+MYSQL_USER ?= acore
 MYSQL_PASSWORD ?= $(MYSQL_ROOT_PASSWORD)
 
 ## INIT
@@ -28,11 +28,12 @@ install-quadlets: ## Install the Quadlet unit files
 
 init-realmlist: ## Initialize the database realmlist
 	mysql \
+		--ssl=0 \
  		-h $(MYSQL_HOST) \
  		-P $(MYSQL_PORT) \
  		-u $(MYSQL_USER) \
  		-p$(MYSQL_PASSWORD) \
- 		< $(CURDIR)/sql/add-realms.sql
+ 		< $(CURDIR)/sql/db-post-init/add-realms.sql
 
 gen-ssh: ## Generate an SSH key pair
 	$(CURDIR)/gen-ssh.sh
@@ -158,6 +159,14 @@ logs-world-live: ## Follow the live world server logs
 logs-world-dev: ## Follow the development world server logs
 	journalctl --user -u acore-authserver-dev.service -f
 
+
+## PODMAN RUN
+pmrun-auth:
+	podman run --rm -it --env-file env/live.env localhost/acore-authserver:live
+
+pmrun-world:
+	podman run --rm -it --env-file env/live.env localhost/acore-worldserver:live
+
 ## OTHER
 
 reload: ## Reload the user systemd daemon
@@ -167,4 +176,9 @@ prune: ## Remove unused Podman images
 	podman image prune -f
 
 db-console: ## Open a MySQL client connected to the database
-	mysql -h 127.0.0.1 -P 3306 -u root -p
+	mysql \
+		--ssl=0 \
+ 		-h $(MYSQL_HOST) \
+ 		-P $(MYSQL_PORT) \
+ 		-u $(MYSQL_USER) \
+ 		-p$(MYSQL_PASSWORD)

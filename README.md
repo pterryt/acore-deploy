@@ -3,7 +3,7 @@
 - Runtime depends on some of these files for now
 
 ### Deploy Steps
-- `git clone https://github.com/pterryt/acore-deploy.git`
+- `git clone https://github.com/pterryt/acore-deploy.git $HOME/azerothcore`
 - replace placeholders in env.dist files and remove .dist ending 
 - add data files to **data/dev/** and **data/live/**
 - (optional) `make gen-ssh` then add pub-key on remote platform
