@@ -63,24 +63,20 @@ LOGIN_SHELL="/usr/sbin/nologin"
 # Where the project ends up inside the new home dir.
 PROJECT_DEST="${HOME_DIR}/$(basename "${PROJECT_DIR}")"
 
-if id "${SERVICE_USER}" &>/dev/null; then
-    echo "Error: User '${SERVICE_USER}' already exists."
-    echo
-    echo "Choose another service name or remove the existing user."
-    exit 1
+if ! id "$SERVICE_USER" &>/dev/null; then
+  echo "Creating service account '${SERVICE_USER}'..."
+    sudo useradd \
+        --create-home \
+        --home-dir "${HOME_DIR}" \
+        --shell "${LOGIN_SHELL}" \
+        --user-group \
+        --comment "Rootless Podman Service Account" \
+        "${SERVICE_USER}"
+  # Prevent password logins.
+    sudo passwd -l "${SERVICE_USER}" >/dev/null
+else
+    echo "User already exists. Continuing"
 fi
-
-echo "Creating service account '${SERVICE_USER}'..."
-sudo useradd \
-    --create-home \
-    --home-dir "${HOME_DIR}" \
-    --shell "${LOGIN_SHELL}" \
-    --user-group \
-    --comment "Rootless Podman Service Account" \
-    "${SERVICE_USER}"
-
-# Prevent password logins.
-sudo passwd -l "${SERVICE_USER}" >/dev/null
 
 echo "Creating directory structure..."
 sudo install -d -o "${SERVICE_USER}" -g "${SERVICE_USER}" -m 700 \
