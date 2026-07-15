@@ -39,10 +39,10 @@ gen-ssh: ## Generate an SSH key pair
 
 ## BUILD
 build: ## Builds binary/db images
-	build-db
-	build-auth
-	build-world-live
-	build-world-dev
+	$(MAKE) build-db
+	$(MAKE) build-auth
+	$(MAKE) build-world-live
+	$(MAKE) build-world-dev
 
 build-db: ## Builds the db image
 	podman build \
@@ -102,10 +102,10 @@ rebuild-world-dev: ## Rebuild the development world server image without using c
 
 ## START
 start: ## Start all services
-	start-db
-	start-auth
-	start-world-live
-	start-world-dev
+	$(MAKE) start-db
+	$(MAKE) start-auth
+	$(MAKE) start-world-live
+	$(MAKE) start-world-dev
 
 start-db: ## Start the database service
 	systemctl --user start acore-database.service

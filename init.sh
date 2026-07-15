@@ -80,17 +80,8 @@ fi
 
 echo "Creating directory structure..."
 sudo install -d -o "${SERVICE_USER}" -g "${SERVICE_USER}" -m 700 \
-    "${HOME_DIR}/.config" \
     "${HOME_DIR}/.config/containers" \
     "${HOME_DIR}/.config/containers/systemd" \
-    "${HOME_DIR}/.config/containers/env" \
-    "${HOME_DIR}/.local" \
-    "${HOME_DIR}/.local/share" \
-    "${HOME_DIR}/.local/state" \
-    "${HOME_DIR}/containers" \
-    "${HOME_DIR}/containers/config" \
-    "${HOME_DIR}/containers/data" \
-    "${HOME_DIR}/containers/logs"
 
 echo "Enabling systemd lingering..."
 sudo loginctl enable-linger "${SERVICE_USER}"
