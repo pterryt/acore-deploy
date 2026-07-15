@@ -4,7 +4,7 @@
 !*.sql.dist
 *.log
 
-src/stable/*
-src/live/*
+src/dev/
+src/live/
 data/*
 data.tar.gz
