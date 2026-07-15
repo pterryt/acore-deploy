@@ -39,7 +39,6 @@ fi
 
 
 PROJECT_DIR="$(pwd)"
-
 # init expected directories
 DIRECTORIES=(
     data/dev
@@ -72,7 +71,7 @@ if id "${SERVICE_USER}" &>/dev/null; then
 fi
 
 echo "Creating service account '${SERVICE_USER}'..."
-useradd \
+sudo useradd \
     --create-home \
     --home-dir "${HOME_DIR}" \
     --shell "${LOGIN_SHELL}" \
@@ -81,7 +80,7 @@ useradd \
     "${SERVICE_USER}"
 
 # Prevent password logins.
-passwd -l "${SERVICE_USER}" >/dev/null
+sudo passwd -l "${SERVICE_USER}" >/dev/null
 
 echo "Creating directory structure..."
 install -d -o "${SERVICE_USER}" -g "${SERVICE_USER}" -m 700 \
@@ -98,7 +97,7 @@ install -d -o "${SERVICE_USER}" -g "${SERVICE_USER}" -m 700 \
     "${HOME_DIR}/containers/logs"
 
 echo "Enabling systemd lingering..."
-loginctl enable-linger "${SERVICE_USER}"
+sudo loginctl enable-linger "${SERVICE_USER}"
 
 
 echo
@@ -153,7 +152,7 @@ fi
 mv -- "${PROJECT_DIR}" "${PROJECT_DEST}"
 
 echo "Setting ownership of '${PROJECT_DEST}' to ${SERVICE_USER}:${SERVICE_USER}..."
-chown -R "${SERVICE_USER}:${SERVICE_USER}" "${PROJECT_DEST}"
+sudo chown -R "${SERVICE_USER}:${SERVICE_USER}" "${PROJECT_DEST}"
 
 # Start a shell as the user
 echo "Switching to ${SERVICE_USER} shell."
