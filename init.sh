@@ -2,6 +2,42 @@
 set -euo pipefail
 : "${SERVICE_NAME:?Missing environment variables. Run via Make. Use 'make help' for options.}"
 
+# -----------------------------
+# Dependency checks
+# -----------------------------
+
+REQUIRED_COMMANDS=(
+    id
+    useradd
+    passwd
+    install
+    loginctl
+    git
+    sudo
+    machinectl
+)
+
+# Debian puts administrative commands in /usr/sbin.
+# Ensure scripts work even on systems with incomplete PATH.
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:${PATH}"
+
+missing_commands=()
+
+for cmd in "${REQUIRED_COMMANDS[@]}"; do
+    if ! command -v "$cmd" >/dev/null 2>&1; then
+        missing_commands+=("$cmd")
+    fi
+done
+
+if (( ${#missing_commands[@]} > 0 )); then
+    echo "Error: Missing required commands:"
+    printf '  - %s\n' "${missing_commands[@]}"
+    echo
+    echo "Install the missing dependencies and rerun."
+    exit 1
+fi
+
+
 PROJECT_DIR="$(pwd)"
 
 # init expected directories
@@ -121,4 +157,4 @@ chown -R "${SERVICE_USER}:${SERVICE_USER}" "${PROJECT_DEST}"
 
 # Start a shell as the user
 echo "Switching to ${SERVICE_USER} shell."
-sudo machinectl shell podmanuser@ /bin/bash
+sudo machinectl shell "${SERVICE_USER}@" /bin/bash
