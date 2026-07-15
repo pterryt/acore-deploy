@@ -120,5 +120,5 @@ echo "Setting ownership of '${PROJECT_DEST}' to ${SERVICE_USER}:${SERVICE_USER}.
 chown -R "${SERVICE_USER}:${SERVICE_USER}" "${PROJECT_DEST}"
 
 # Start a shell as the user
-echo "Starting {"
+echo "Switching to ${SERVICE_USER} shell."
 sudo machinectl shell podmanuser@ /bin/bash
