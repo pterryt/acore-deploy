@@ -22,36 +22,33 @@ for dir in "${DIRECTORIES[@]}"; do
 done
 
 
-## CREATE SERVICE USER
-
-USER_NAME="${SERVICE_NAME}-user"
-HOME_DIR="/home/${USER_NAME}"
+HOME_DIR="/home/${SERVICE_USER}"
 LOGIN_SHELL="/usr/sbin/nologin"
 
 # Where the project ends up inside the new home dir.
 PROJECT_DEST="${HOME_DIR}/$(basename "${PROJECT_DIR}")"
 
-if id "${USER_NAME}" &>/dev/null; then
-    echo "Error: User '${USER_NAME}' already exists."
+if id "${SERVICE_USER}" &>/dev/null; then
+    echo "Error: User '${SERVICE_USER}' already exists."
     echo
     echo "Choose another service name or remove the existing user."
     exit 1
 fi
 
-echo "Creating service account '${USER_NAME}'..."
+echo "Creating service account '${SERVICE_USER}'..."
 useradd \
     --create-home \
     --home-dir "${HOME_DIR}" \
     --shell "${LOGIN_SHELL}" \
     --user-group \
     --comment "Rootless Podman Service Account" \
-    "${USER_NAME}"
+    "${SERVICE_USER}"
 
 # Prevent password logins.
-passwd -l "${USER_NAME}" >/dev/null
+passwd -l "${SERVICE_USER}" >/dev/null
 
 echo "Creating directory structure..."
-install -d -o "${USER_NAME}" -g "${USER_NAME}" -m 700 \
+install -d -o "${SERVICE_USER}" -g "${SERVICE_USER}" -m 700 \
     "${HOME_DIR}/.config" \
     "${HOME_DIR}/.config/containers" \
     "${HOME_DIR}/.config/containers/systemd" \
@@ -65,26 +62,15 @@ install -d -o "${USER_NAME}" -g "${USER_NAME}" -m 700 \
     "${HOME_DIR}/containers/logs"
 
 echo "Enabling systemd lingering..."
-loginctl enable-linger "${USER_NAME}"
+loginctl enable-linger "${SERVICE_USER}"
 
-echo "Moving project directory '${PROJECT_DIR}' -> '${PROJECT_DEST}'..."
-if [[ -e "${PROJECT_DEST}" ]]; then
-    echo "Error: '${PROJECT_DEST}' already exists. Refusing to overwrite."
-    exit 1
-fi
-mv -- "${PROJECT_DIR}" "${PROJECT_DEST}"
-
-echo "Setting ownership of '${PROJECT_DEST}' to ${USER_NAME}:${USER_NAME}..."
-chown -R "${USER_NAME}:${USER_NAME}" "${PROJECT_DEST}"
 
 echo
 echo "Successfully created service account."
 echo
 echo "  Service : ${SERVICE_NAME}"
-echo "  User    : ${USER_NAME}"
+echo "  User    : ${SERVICE_USER}"
 echo "  Home    : ${HOME_DIR}"
-echo "  Shell   : ${LOGIN_SHELL}"
-echo "  Project : ${PROJECT_DEST}"
 
 ## CLONE SOURCE
 
@@ -121,4 +107,18 @@ deploy_env() {
 deploy_env "development" "src/test"
 deploy_env "stable" "src/stable"
 
+# Move project to service user home
 
+echo "Moving project directory '${PROJECT_DIR}' -> '${PROJECT_DEST}'..."
+if [[ -e "${PROJECT_DEST}" ]]; then
+    echo "Error: '${PROJECT_DEST}' already exists. Refusing to overwrite."
+    exit 1
+fi
+mv -- "${PROJECT_DIR}" "${PROJECT_DEST}"
+
+echo "Setting ownership of '${PROJECT_DEST}' to ${SERVICE_USER}:${SERVICE_USER}..."
+chown -R "${SERVICE_USER}:${SERVICE_USER}" "${PROJECT_DEST}"
+
+# Start a shell as the user
+echo "Starting {"
+sudo machinectl shell podmanuser@ /bin/bash
