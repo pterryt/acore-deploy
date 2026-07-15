@@ -54,20 +54,20 @@ build-auth: ## Builds the auth server image
 	podman build \
 	-f $(CURDIR)/podman/Containerfile \
 	--target authserver \
-	-t acore-authserver:live $(CURDIR)
+	-t acore-authserver:live $(CURDIR)/src/live
 
 build-world-live: ## Builds the live world server image
 	podman build \
 	-f $(CURDIR)/podman/Containerfile \
 	--target worldserver \
-	-t acore-worldserver:live $(CURDIR)
+	-t acore-worldserver:live $(CURDIR)/src/live
 
 build-world-dev: ## Builds the dev world server image
 	podman build \
 	--build-arg BRANCH_SET=dev \
 	-f $(CURDIR)/podman/Containerfile \
 	--target worldserver \
-	-t acore-worldserver:dev $(CURDIR)
+	-t acore-worldserver:dev $(CURDIR)/src/dev
 
 ## REBUILD
 
@@ -83,14 +83,14 @@ rebuild-auth: ## Rebuild the auth server image without using cache
 	--no-cache \
 	-f $(CURDIR)/podman/Containerfile \
 	--target authserver \
-	-t acore-authserver:live $(CURDIR)
+	-t acore-authserver:live $(CURDIR)/src/live
 
 rebuild-world-live: ## Rebuild the live world server image without using cache
 	podman build \
 	--no-cache \
 	-f $(CURDIR)/podman/Containerfile \
 	--target worldserver \
-	-t acore-worldserver:live $(CURDIR)
+	-t acore-worldserver:live $(CURDIR)/src/live
 
 rebuild-world-dev: ## Rebuild the development world server image without using cache
 	podman build \
@@ -98,7 +98,7 @@ rebuild-world-dev: ## Rebuild the development world server image without using c
 	--build-arg BRANCH_SET=dev \
 	-f $(CURDIR)/podman/Containerfile \
 	--target worldserver \
-	-t acore-worldserver:dev $(CURDIR)
+	-t acore-worldserver:dev $(CURDIR)/src/dev
 
 ## START
 start: ## Start all services
