@@ -5,5 +5,6 @@
     <mapping directory="$PROJECT_DIR$/src/dev" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/live" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/live/modules/mod-individual-progression" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/test" vcs="Git" />
   </component>
 </project>

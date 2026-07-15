@@ -105,10 +105,22 @@ echo "  Home    : ${HOME_DIR}"
 
 ## CLONE SOURCE
 
+# revise remote url to match our ssh alias
+#rewrite_ssh_host() {
+#    local repo="$1"
+#    local host_alias="$2"
+#
+#    echo "$repo" | sed "s#git@github.com:#git@$host_alias:#"
+#}
+GIT_SSH_COMMAND="ssh -i ~/.ssh/${REMOTE_IDENTITY} -o IdentitiesOnly=yes" \
+
 clone_or_update() {
     local repo="$1"
     local branch="$2"
     local dir="$3"
+
+#    repo=$(rewrite_ssh_host "$repo" "$REMOTE_IDENTITY")
+
     if [[ -d "$dir/.git" ]]; then
         echo "Updating $dir"
         git -C "$dir" fetch
