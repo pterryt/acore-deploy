@@ -129,8 +129,8 @@ deploy_env() {
 # Deploy
 # -----------------------------
 
-deploy_env "development" "src/test"
-deploy_env "stable" "src/stable"
+deploy_env "development" "src/dev"
+deploy_env "stable" "src/live"
 
 # Move project to service user home
 
