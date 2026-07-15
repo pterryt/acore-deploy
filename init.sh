@@ -83,7 +83,7 @@ sudo useradd \
 sudo passwd -l "${SERVICE_USER}" >/dev/null
 
 echo "Creating directory structure..."
-install -d -o "${SERVICE_USER}" -g "${SERVICE_USER}" -m 700 \
+sudo install -d -o "${SERVICE_USER}" -g "${SERVICE_USER}" -m 700 \
     "${HOME_DIR}/.config" \
     "${HOME_DIR}/.config/containers" \
     "${HOME_DIR}/.config/containers/systemd" \
