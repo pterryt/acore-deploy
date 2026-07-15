@@ -1,0 +1,5 @@
+[Volume]
+VolumeName=acore-mysql-data
+
+[Install]
+WantedBy=default.target

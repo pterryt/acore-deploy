@@ -1,0 +1,58 @@
+USE ${DB_NAME}_auth;
+
+INSERT INTO realmlist
+(
+    id,
+    name,
+    address,
+    localAddress,
+    localSubnetMask,
+    port,
+    icon,
+    flag,
+    timezone,
+    allowedSecurityLevel,
+    population,
+    gamebuild
+)
+VALUES
+(
+    1,
+    'Live Server',
+    '${SERVER_ADDRESS}',
+    '127.0.0.1',
+    '255.255.255.0',
+    8085,
+    0,
+    0,
+    1,
+    0,
+    0,
+    12340
+),
+(
+    2,
+    'Test Server',
+    '${SERVER_ADDRESS}',
+    '127.0.0.1',
+    '255.255.255.0',
+    8086,
+    0,
+    0,
+    1,
+    0,
+    0,
+    12340
+)
+ON DUPLICATE KEY UPDATE
+    name = VALUES(name),
+    address = VALUES(address),
+    localAddress = VALUES(localAddress),
+    localSubnetMask = VALUES(localSubnetMask),
+    port = VALUES(port),
+    icon = VALUES(icon),
+    flag = VALUES(flag),
+    timezone = VALUES(timezone),
+    allowedSecurityLevel = VALUES(allowedSecurityLevel),
+    population = VALUES(population),
+    gamebuild = VALUES(gamebuild);

@@ -1,0 +1,9 @@
+*.env
+!*.env.dist
+*.sql
+!*.sql.dist
+*.log
+
+src/stable/*
+src/live/*
+data/*

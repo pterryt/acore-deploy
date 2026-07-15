@@ -1,0 +1,23 @@
+[Unit]
+Description=Azerothcore World Server
+
+[Container]
+Image=localhost/acore-worldserver:live
+ContainerName=acore-worldserver
+Network=acore.network
+PublishPort=8085:8085
+PublishPort=7878:7878
+UserNS=keep-id
+EnvironmentFile=%h/azerothcore/env/live.env
+PodmanArgs=--interactive --tty
+Volume=%h/azerothcore/config/live:/azerothcore/env/dist/etc
+Volume=%h/azerothcore/logs/live:/azerothcore/env/dist/logs
+Volume=%h/azerothcore/src/live/data:/azerothcore/data:ro
+Volume=%h/azerothcore/data/live:/azerothcore/env/dist/data:ro
+Volume=%h/azerothcore/src/live/modules:/azerothcore/modules:ro
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target

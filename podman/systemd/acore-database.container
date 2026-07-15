@@ -1,0 +1,17 @@
+[Unit]
+Description=Azerothcore Database Server
+
+[Container]
+Image=acore-database:latest
+ContainerName=acore-database
+Network=acore.network
+Volume=acore-mysql-data.volume:/var/lib/mysql
+EnvironmentFile=%h/azerothcore/env/live.env
+PublishPort=3306:3306
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target
+

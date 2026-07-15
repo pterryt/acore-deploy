@@ -1,0 +1,5 @@
+[Unit]
+Description=Azerothcore Internal Network
+
+[Network]
+NetworkName=acore-network

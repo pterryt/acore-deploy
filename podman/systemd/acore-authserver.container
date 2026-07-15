@@ -1,0 +1,19 @@
+[Unit]
+Description=Azerothcore Auth Server
+
+[Container]
+Image=localhost/acore-authserver:live
+ContainerName=acore-authserver
+Network=acore.network
+PublishPort=3724:3724
+UserNS=keep-id
+EnvironmentFile=%h/azerothcore/env/live.env
+Volume=%h/azerothcore/config/live:/azerothcore/env/dist/etc
+Volume=%h/azerothcore/logs/auth:/azerothcore/env/dist/logs
+Volume=%h/azerothcore/src/live/data:/azerothcore/data:ro
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target
