@@ -105,21 +105,12 @@ echo "  Home    : ${HOME_DIR}"
 
 ## CLONE SOURCE
 
-# revise remote url to match our ssh alias
-#rewrite_ssh_host() {
-#    local repo="$1"
-#    local host_alias="$2"
-#
-#    echo "$repo" | sed "s#git@github.com:#git@$host_alias:#"
-#}
 GIT_SSH_COMMAND="ssh -i ~/.ssh/${REMOTE_IDENTITY} -o IdentitiesOnly=yes" \
 
 clone_or_update() {
     local repo="$1"
     local branch="$2"
     local dir="$3"
-
-#    repo=$(rewrite_ssh_host "$repo" "$REMOTE_IDENTITY")
 
     if [[ -d "$dir/.git" ]]; then
         echo "Updating $dir"
@@ -157,7 +148,7 @@ if [[ -e "${PROJECT_DEST}" ]]; then
     echo "Error: '${PROJECT_DEST}' already exists. Refusing to overwrite."
     exit 1
 fi
-mv -- "${PROJECT_DIR}" "${PROJECT_DEST}"
+sudo mv -- "${PROJECT_DIR}" "${PROJECT_DEST}"
 
 echo "Setting ownership of '${PROJECT_DEST}' to ${SERVICE_USER}:${SERVICE_USER}..."
 sudo chown -R "${SERVICE_USER}:${SERVICE_USER}" "${PROJECT_DEST}"
