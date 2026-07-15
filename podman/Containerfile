@@ -1,7 +1,7 @@
 ARG UBUNTU_VERSION=24.04
 ARG MYSQL_VERSION=8.4
 
-FROM ubuntu:$UBUNTU_VERSION AS skeleton
+FROM docker.io/library/ubuntu:$UBUNTU_VERSION AS skeleton
 
 # Note: ARG instructions defined after FROM are available in this build stage.
 # Placing ARG TZ here (after FROM) ensures it is accessible for configuring the timezone below.
@@ -170,6 +170,6 @@ COPY --chown=$PODMAN_USER:$PODMAN_USER \
 
 CMD ["worldserver"]
 
-FROM mysql:${MYSQL_VERSION} AS database
+FROM docker.io/library/mysql:${MYSQL_VERSION} AS database
 
 COPY sql/db-init/ /docker-entrypoint-initdb.d/
