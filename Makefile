@@ -118,7 +118,7 @@ start-world-live: ## Start the live world server service
 	systemctl --user start acore-worldserver.service
 
 start-world-dev: ## Start the development world server service
-	systemctl --user start acore-worldserver-dev.container
+	systemctl --user start acore-worldserver-dev.service
 
 ## RESTART
 
