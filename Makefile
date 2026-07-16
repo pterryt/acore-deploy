@@ -154,11 +154,11 @@ logs-auth: ## Follow the auth server logs
 	journalctl --user -u acore-authserver.service -f
 
 logs-world-live: ## Follow the live world server logs
-	journalctl --user -u acore-worldserver.service -f
+#	journalctl --user -u acore-worldserver.service -f
+	journalctl --user -u acore-worldserver.service -n 200
 
 logs-world-dev: ## Follow the development world server logs
-	journalctl --user -u acore-authserver-dev.service -f
-
+	journalctl --user -u acore-worldserver-dev.service -n 200
 
 ## PODMAN RUN
 pmrun-auth:
