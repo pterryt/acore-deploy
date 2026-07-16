@@ -1,11 +1,11 @@
 [Unit]
-Description=Azerothcore World Server
+Description=Azerothcore Test World Server
 
 [Container]
 Image=localhost/acore-worldserver:dev
-ContainerName=acore-worldserver
+ContainerName=acore-worldserver-dev
 Network=acore.network
-PublishPort=8086:8085
+PublishPort=8088:8085
 PublishPort=7879:7878
 UserNS=keep-id
 EnvironmentFile=%h/azerothcore/env/dev.env

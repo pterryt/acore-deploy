@@ -132,7 +132,7 @@ restart-world-live: ## Restart the live world server service
 	systemctl --user restart acore-worldserver.service
 
 restart-world-dev: ## Restart the development world server service
-	systemctl --user restart acore-worldserver-dev.container
+	systemctl --user restart acore-worldserver-dev.service
 
 ## CONTAINER SHELL
 

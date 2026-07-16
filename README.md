@@ -22,3 +22,4 @@
 
 ### TODO
 - remove all runtime dependence on deploy files so they can be removed after
+- logs aren't being sent to /logs

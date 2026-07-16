@@ -3,9 +3,9 @@ Description=Azerothcore World Server
 
 [Container]
 Image=localhost/acore-worldserver:live
-ContainerName=acore-worldserver
+ContainerName=acore-worldserver-live
 Network=acore.network
-PublishPort=8085:8085
+PublishPort=8087:8085
 PublishPort=7878:7878
 UserNS=keep-id
 EnvironmentFile=%h/azerothcore/env/live.env
