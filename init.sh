@@ -43,13 +43,10 @@ PROJECT_DIR="$(pwd)"
 DIRECTORIES=(
     data/dev
     data/live
-
     logs/auth
     logs/dev
     logs/live
-
-    src/dev
-    src/live
+    src
 )
 
 for dir in "${DIRECTORIES[@]}"; do
