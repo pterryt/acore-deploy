@@ -136,7 +136,7 @@ if [[ -e "${PROJECT_DEST}" ]]; then
     echo "Error: '${PROJECT_DEST}' already exists. Refusing to overwrite."
     exit 1
 fi
-sudo mv -- "${PROJECT_DIR}" "${PROJECT_DEST}"
+sudo rsync -a --delete "${PROJECT_DIR}/" "${PROJECT_DEST}/"
 
 echo "Setting ownership of '${PROJECT_DEST}' to ${SERVICE_USER}:${SERVICE_USER}..."
 sudo chown -R "${SERVICE_USER}:${SERVICE_USER}" "${PROJECT_DEST}"

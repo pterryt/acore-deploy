@@ -17,6 +17,11 @@ MYSQL_PORT ?= 3307
 MYSQL_USER ?= acore
 MYSQL_PASSWORD ?= $(MYSQL_ROOT_PASSWORD)
 
+## CLEAN
+
+clean: ## Removes project files for service user and deletes the user
+	$(CURDIR)/clean.sh
+
 ## INIT
 
 init: ## Initialize deploy files
