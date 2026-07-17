@@ -9,7 +9,7 @@
 - (optional) `make gen-ssh` then add pub-key on remote platform
 - `make init`
 - `make build`
-- `make install quadlets`
+- `make install`
 - `make start`
 
 ### Debugging

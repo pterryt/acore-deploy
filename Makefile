@@ -28,7 +28,7 @@ init: ## Initialize deploy files
 	$(CURDIR)/sql/envsub.sh
 	$(CURDIR)/init.sh
 
-install-quadlets: ## Install the Quadlet unit files
+install: ## Install the Quadlet unit files
 	$(CURDIR)/podman/install-quadlets.sh
 
 init-realmlist: ## Initialize the database realmlist
