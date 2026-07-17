@@ -1,11 +1,13 @@
 [Unit]
 Description=Azerothcore World Server
+After=acore-authserver.service acore-database.service
+Requires=acore-authserver.service acore-database.service
 
 [Container]
 Image=localhost/acore-worldserver:live
 ContainerName=acore-worldserver-live
 Network=acore.network
-PublishPort=8087:8085
+PublishPort=8085:8085
 PublishPort=7878:7878
 UserNS=keep-id
 EnvironmentFile=%h/azerothcore/env/live.env

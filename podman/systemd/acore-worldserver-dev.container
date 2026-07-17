@@ -1,11 +1,13 @@
 [Unit]
 Description=Azerothcore Test World Server
+After=acore-authserver.service acore-database.service
+Requires=acore-authserver.service acore-database.service
 
 [Container]
 Image=localhost/acore-worldserver:dev
 ContainerName=acore-worldserver-dev
 Network=acore.network
-PublishPort=8088:8085
+PublishPort=8086:8085
 PublishPort=7879:7878
 UserNS=keep-id
 EnvironmentFile=%h/azerothcore/env/dev.env

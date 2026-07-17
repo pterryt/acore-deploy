@@ -8,8 +8,10 @@
 - add data files to **data/dev/** and **data/live/**
 - (optional) `make gen-ssh` then add pub-key on remote platform
 - `make init`
+- `cd azerothcore`
 - `make build`
 - `make install`
+- `make init-realmlist`
 - `make start`
 
 ### Debugging

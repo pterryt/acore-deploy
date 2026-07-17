@@ -13,7 +13,7 @@ help:
 		{ printf "\033[32m  %-35s\033[0m %s\n", $$1, $$2 }'
 
 MYSQL_HOST ?= 127.0.0.1
-MYSQL_PORT ?= 3307
+MYSQL_PORT ?= 3306
 MYSQL_USER ?= acore
 MYSQL_PASSWORD ?= $(MYSQL_ROOT_PASSWORD)
 
@@ -58,18 +58,24 @@ build-db: ## Builds the db image
 
 build-auth: ## Builds the auth server image
 	podman build \
+    --build-arg USER_ID=$$(id -u) \
+    --build-arg GROUP_ID=$$(id -g) \
 	-f $(CURDIR)/podman/Containerfile \
 	--target authserver \
 	-t acore-authserver:live $(CURDIR)/src/live
 
 build-world-live: ## Builds the live world server image
 	podman build \
+	--build-arg USER_ID=$$(id -u) \
+	--build-arg GROUP_ID=$$(id -g) \
 	-f $(CURDIR)/podman/Containerfile \
 	--target worldserver \
 	-t acore-worldserver:live $(CURDIR)/src/live
 
 build-world-dev: ## Builds the dev world server image
 	podman build \
+	--build-arg USER_ID=$$(id -u) \
+	--build-arg GROUP_ID=$$(id -g) \
 	--build-arg BRANCH_SET=dev \
 	-f $(CURDIR)/podman/Containerfile \
 	--target worldserver \
@@ -87,6 +93,9 @@ rebuild-db: ## Rebuild the db image without using cache
 rebuild-auth: ## Rebuild the auth server image without using cache
 	podman build \
 	--no-cache \
+    --build-arg USER_ID=$(id -u) \
+    --build-arg GROUP_ID=$(id -g) \ 
+	--build-arg BRANCH_SET=live \
 	-f $(CURDIR)/podman/Containerfile \
 	--target authserver \
 	-t acore-authserver:live $(CURDIR)/src/live
@@ -94,6 +103,9 @@ rebuild-auth: ## Rebuild the auth server image without using cache
 rebuild-world-live: ## Rebuild the live world server image without using cache
 	podman build \
 	--no-cache \
+    --build-arg USER_ID=$(id -u) \
+    --build-arg GROUP_ID=$(id -g) \ 
+	--build-arg BRANCH_SET=live \
 	-f $(CURDIR)/podman/Containerfile \
 	--target worldserver \
 	-t acore-worldserver:live $(CURDIR)/src/live
@@ -101,6 +113,8 @@ rebuild-world-live: ## Rebuild the live world server image without using cache
 rebuild-world-dev: ## Rebuild the development world server image without using cache
 	podman build \
 	--no-cache \
+    --build-arg USER_ID=$(id -u) \
+    --build-arg GROUP_ID=$(id -g) \ 
 	--build-arg BRANCH_SET=dev \
 	-f $(CURDIR)/podman/Containerfile \
 	--target worldserver \
@@ -124,6 +138,26 @@ start-world-live: ## Start the live world server service
 
 start-world-dev: ## Start the development world server service
 	systemctl --user start acore-worldserver-dev.service
+
+
+## START
+stop: ## Start all services
+	$(MAKE) stop-db
+	$(MAKE) stop-auth
+	$(MAKE) stop-world-live
+	$(MAKE) stop-world-dev
+
+stop-db: ## Stop the database service
+	systemctl --user stop acore-database.service
+
+stop-auth: ## Stop the auth server service
+	systemctl --user stop acore-authserver.service
+
+stop-world-live: ## Stop the live world server service
+	systemctl --user stop acore-worldserver.service
+
+stop-world-dev: ## Stop the development world server service
+	systemctl --user stop acore-worldserver-dev.service
 
 ## RESTART
 

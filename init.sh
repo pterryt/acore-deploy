@@ -75,6 +75,11 @@ else
     echo "User already exists. Continuing"
 fi
 
+SERVICE_UID=$(id -u "${SERVICE_USER}")
+SERVICE_GID=$(id -g "${SERVICE_USER}")
+
+echo "Created ${SERVICE_USER}: UID=${SERVICE_UID} GID=${SERVICE_GID}"
+
 echo "Creating directory structure..."
 sudo install -d -o "${SERVICE_USER}" -g "${SERVICE_USER}" -m 700 \
     "${HOME_DIR}/.config/containers" \

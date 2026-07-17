@@ -4,6 +4,12 @@ set -euo pipefail
 : "${SERVICE_NAME:?Missing environment variables}"
 : "${SERVICE_USER:?Missing environment variables}"
 
+# Nothing to clean up if the user doesn't exist.
+if ! id "${SERVICE_USER}" >/dev/null 2>&1; then
+    echo "Service user '${SERVICE_USER}' does not exist. Nothing to clean up."
+    exit 0
+fi
+
 HOME_DIR="/home/${SERVICE_USER}"
 PROJECT_NAME="azerothcore"
 PROJECT_DEST="${HOME_DIR}/${PROJECT_NAME}"
@@ -16,12 +22,12 @@ if [[ -d "${PROJECT_DEST}" ]]; then
     sudo rm -rf "${PROJECT_DEST}"
 fi
 
-echo "Stopping and user processes..."
-sudo loginctl terminate-user "$SERVICE_USER"
+if loginctl list-users --no-legend | awk '{print $2}' | grep -qx "${SERVICE_USER}"; then
+    echo "Stopping user processes..."
+    sudo loginctl terminate-user "${SERVICE_USER}"
+fi
 
 echo "Removing service user..."
-if id "${SERVICE_USER}" >/dev/null 2>&1; then
-    sudo userdel --remove "${SERVICE_USER}"
-fi
+sudo userdel --remove "${SERVICE_USER}"
 
 echo "Cleanup complete."
