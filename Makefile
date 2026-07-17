@@ -82,6 +82,12 @@ build-world-dev: ## Builds the dev world server image
 
 ## REBUILD
 
+rebuild: ## Rebuilds binary/db images without using cache
+	$(MAKE) rebuild-db
+	$(MAKE) rebuild-auth
+	$(MAKE) rebuild-world-live
+	$(MAKE) rebuild-world-dev
+
 rebuild-db: ## Rebuild the db image without using cache
 	podman build \
 	--no-cache \
@@ -139,7 +145,7 @@ start-world-dev: ## Start the development world server service
 	systemctl --user start acore-worldserver-dev.service
 
 
-## START
+## STOP
 stop: ## Start all services
 	$(MAKE) stop-db
 	$(MAKE) stop-auth
@@ -212,10 +218,10 @@ errors-world-dev: ## Print the dev server error logs
 	# journalctl --user -u acore-worldserver-dev.service -n 200
 
 ## PODMAN RUN
-pmrun-auth:
+pmrun-auth: ## Run the auth container
 	podman run --rm -it --env-file env/auth.env localhost/acore-authserver:live
 
-pmrun-world:
+pmrun-world: ## Run the world container
 	podman run --rm -it --env-file env/live.env localhost/acore-worldserver:live
 
 ## OTHER
