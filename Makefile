@@ -33,7 +33,6 @@ install: ## Install the Quadlet unit files
 
 init-realmlist: ## Initialize the database realmlist
 	mysql \
-		--ssl=0 \
  		-h $(MYSQL_HOST) \
  		-P $(MYSQL_PORT) \
  		-u $(MYSQL_USER) \
@@ -190,18 +189,31 @@ db-shell: ## Open a shell in the database container
 ## LOGS
 
 logs-auth: ## Follow the auth server logs
-	journalctl --user -u acore-authserver.service -f
+	tail -f -n +1 $(CURDIR)/logs/auth/Auth.log
+	# journalctl --user -u acore-authserver.service -f
 
 logs-world-live: ## Follow the live world server logs
 #	journalctl --user -u acore-worldserver.service -f
-	journalctl --user -u acore-worldserver.service -n 200
+	tail -f -n +1 $(CURDIR)/logs/live/Server.log
 
 logs-world-dev: ## Follow the development world server logs
-	journalctl --user -u acore-worldserver-dev.service -n 200
+	tail -f -n +1 $(CURDIR)/logs/dev/Server.log
+	# journalctl --user -u acore-worldserver-dev.service -n 200
+
+
+## ERRORS
+
+errors-world-live: ## Print the live server error logs
+#	journalctl --user -u acore-worldserver.service -f
+	tail -f -n +1 $(CURDIR)/logs/live/Server.log
+
+errors-world-dev: ## Print the dev server error logs
+	tail -f -n +1 $(CURDIR)/logs/dev/Server.log
+	# journalctl --user -u acore-worldserver-dev.service -n 200
 
 ## PODMAN RUN
 pmrun-auth:
-	podman run --rm -it --env-file env/live.env localhost/acore-authserver:live
+	podman run --rm -it --env-file env/auth.env localhost/acore-authserver:live
 
 pmrun-world:
 	podman run --rm -it --env-file env/live.env localhost/acore-worldserver:live
@@ -216,7 +228,6 @@ prune: ## Remove unused Podman images
 
 db-console: ## Open a MySQL client connected to the database
 	mysql \
-		--ssl=0 \
  		-h $(MYSQL_HOST) \
  		-P $(MYSQL_PORT) \
  		-u $(MYSQL_USER) \
